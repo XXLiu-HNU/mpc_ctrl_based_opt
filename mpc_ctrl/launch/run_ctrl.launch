@@ -1,8 +1,0 @@
-<launch>
-	
-	<node pkg="mpc_ctrl" type="JPCM_node" name="JPCM_node" output="screen">
-		<param name= "out_file" type="string" value="$(find mpc_ctrl)/scripts/"/>
-        <rosparam command="load" file="$(find mpc_ctrl)/config/ctrl_param_fpv.yaml" />
-	</node>
- 
-</launch>

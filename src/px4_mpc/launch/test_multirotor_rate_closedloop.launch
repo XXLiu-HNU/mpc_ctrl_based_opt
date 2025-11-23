@@ -1,0 +1,4 @@
+<launch>
+    <node pkg="px4_mpc" type="test_multirotor_rate_closedloop.py" name="mpc_quadrotor" output="screen">
+    </node>
+</launch>

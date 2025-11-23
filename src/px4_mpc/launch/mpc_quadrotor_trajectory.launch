@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- 
+    基于MAVROS的轨迹跟踪MPC测试
+    启动前确保:
+    1. MAVROS已连接到PX4
+    2. 飞机已解锁并进入OFFBOARD模式
+    -->
+    
+    <!-- 里程计话题配置 -->
+    <arg name="odom_topic" default="/mavros/local_position/odom"/>
+    
+    <!-- 圆形轨迹生成器 -->
+    <node name="circular_trajectory_generator" pkg="px4_mpc" type="circular_trajectory_generator.py" output="screen">
+        <!-- 里程计话题 -->
+        <param name="odom_topic" value="$(arg odom_topic)"/>
+        
+        <!-- 轨迹参数 -->
+        <param name="radius" value="3.0"/>          <!-- 圆的半径(m) -->
+        <param name="height" value="3.0"/>          <!-- 飞行高度(m) -->
+        <param name="period" value="5.0"/>         <!-- 完成一圈的时间(s) -->
+        <param name="center_x" value="0.0"/>        <!-- 圆心x坐标 -->
+        <param name="center_y" value="0.0"/>        <!-- 圆心y坐标 -->
+        <param name="dt" value="0.02"/>             <!-- 轨迹点时间间隔(s) -->
+        <param name="publish_rate" value="0.5"/>    <!-- 发布频率(Hz) - 每2秒发布一次 -->
+        
+        <!-- 起飞等待参数 -->
+        <param name="wait_for_takeoff" value="true"/>              <!-- 是否等待起飞悬停 -->
+        <param name="takeoff_height_threshold" value="2.5"/>       <!-- 起飞高度阈值(m) -->
+        <param name="hover_time_threshold" value="3.0"/>           <!-- 悬停稳定时间(s) -->
+        <param name="position_tolerance" value="0.3"/>             <!-- 位置容忍度(m) -->
+        <param name="velocity_tolerance" value="0.2"/>             <!-- 速度容忍度(m/s) -->
+    </node>
+    
+    <!-- 轨迹跟踪MPC控制器 -->
+    <node name="mpc_quadrotor_trajectory" pkg="px4_mpc" type="mpc_quadrotor_trajectory.py" output="screen">
+        <!-- 里程计话题 -->
+        <param name="odom_topic" value="$(arg odom_topic)"/>
+    </node>
+    
+    <!-- RViz可视化 -->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find px4_mpc)/rviz/trajectory_tracking.rviz" required="false"/>
+    
+</launch>

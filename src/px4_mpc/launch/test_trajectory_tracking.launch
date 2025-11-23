@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- 轨迹跟踪MPC测试 -->
+    
+    <!-- 圆形轨迹生成器 -->
+    <node name="circular_trajectory_generator" pkg="px4_mpc" type="circular_trajectory_generator.py" output="screen">
+        <param name="radius" value="2.0"/>          <!-- 圆的半径(m) -->
+        <param name="height" value="3.0"/>          <!-- 飞行高度(m) -->
+        <param name="period" value="10.0"/>         <!-- 完成一圈的时间(s) -->
+        <param name="center_x" value="0.0"/>        <!-- 圆心x坐标 -->
+        <param name="center_y" value="0.0"/>        <!-- 圆心y坐标 -->
+        <param name="dt" value="0.02"/>             <!-- 轨迹点时间间隔(s) -->
+        <param name="publish_rate" value="1.0"/>    <!-- 发布频率(Hz) -->
+    </node>
+    
+    <!-- 轨迹跟踪MPC控制器 -->
+    <node name="trajectory_tracking_mpc" pkg="px4_mpc" type="test_trajectory_tracking.py" output="screen"/>
+    
+</launch>
